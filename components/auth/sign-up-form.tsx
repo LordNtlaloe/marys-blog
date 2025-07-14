@@ -25,7 +25,7 @@ export default function SignUpForm() {
             phone_number: "",
             email: "",
             password: "",
-            role: "Cashier"
+            role: "User"
         }
     });
 

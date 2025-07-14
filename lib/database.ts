@@ -32,7 +32,7 @@ if (process.env.NODE_ENV === "development") {
 }
 
 // Get the database reference
-const db = client.db("td_holdings_db")
+const db = client.db("marys-blog")
 
 // Export both the client and database
 export default client

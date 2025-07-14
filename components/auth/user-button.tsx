@@ -9,10 +9,10 @@ import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar'
 import { UserCircle2 } from 'lucide-react'
 import { useCurrentUser } from '@/hooks/use-current-user'
 import LogoutButton from './logout-button'
-import { DropdownMenuLabel } from '@radix-ui/react-dropdown-menu';
+import { DropdownMenuLabel } from '@radix-ui/react-dropdown-menu'
 
 export default function UserButton() {
-  const user = useCurrentUser()
+  const { user } = useCurrentUser()
 
   return (
     <DropdownMenu>
@@ -20,7 +20,7 @@ export default function UserButton() {
         <Avatar>
           <AvatarImage
             src={user?.image || ""}
-            alt={user?.name || "User avatar"}
+            alt={user?.first_name || "User avatar"}
           />
           <AvatarFallback className='bg-emerald-500'>
             <UserCircle2 className='w-6 h-6 text-white' />

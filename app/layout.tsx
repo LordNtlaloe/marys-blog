@@ -1,9 +1,10 @@
 import type { Metadata } from "next";
 // import { Geist, Geist_Mono } from "next/font/google";
-import "./globals.css";
+import "@/app/globals.css";
 import { SessionProvider } from "next-auth/react";
 import { auth } from "@/auth"
 import { Toaster } from "@/components/ui/sonner";
+import { ThemeProvider } from "@/context/ThemeContext";
 // const geistSans = Geist({
 //   variable: "--font-geist-sans",
 //   subsets: ["latin"],
@@ -27,12 +28,16 @@ export default async function RootLayout({
   const session = await auth();
   return (
     <SessionProvider session={session}>
-      <html lang="en">
-        <body className={`antialiased`}>
-          {children}
-          <Toaster />
-        </body>
-      </html>
+      <ThemeProvider>
+        <html lang="en">
+          <body className="w-full">
+
+            {children}
+            <Toaster />
+
+          </body>
+        </html>
+      </ThemeProvider>
     </SessionProvider>
   );
 }
