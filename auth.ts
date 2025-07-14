@@ -30,7 +30,7 @@ declare module "next-auth/jwt" {
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
   adapter: MongoDBAdapter(client, {
-    databaseName: "hr_management_db"
+    databaseName: "marys-blog"
   }),
   providers: [
     Google({

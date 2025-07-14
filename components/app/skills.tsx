@@ -69,13 +69,15 @@ export function Skills() {
 
           {/* Image Section */}
           <div className="w-full lg:justify-start justify-center items-start flex">
-            <div className="sm:w-[564px] w-full sm:h-[646px] h-auto rounded-3xl relative overflow-hidden">
+            <div className="relative w-full h-[646px] sm:w-[564px] sm:h-[646px] rounded-3xl overflow-hidden">
               <Image
-                className="sm:mt-5 sm:ml-5 w-full h-full rounded-3xl object-top object-cover z-10"
                 src="/images/IMG_8015-1.jpg"
                 alt="skills illustration"
+                fill
+                className="object-top object-cover rounded-3xl z-10"
               />
             </div>
+
           </div>
 
         </div>

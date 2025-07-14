@@ -16,7 +16,7 @@ interface TokenEmailProps {
     tokenType: 'verification' | 'reset' | 'invitation';
 }
 
-const baseUrl = process.env.NEXTAUTH_URL || 'http://localhost:3000';
+const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000';
 
 export const TokenEmail = ({ name, token, tokenType = 'verification' }: TokenEmailProps) => {
     let actionUrl = '';

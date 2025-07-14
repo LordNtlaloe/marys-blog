@@ -18,7 +18,8 @@ export const authRoutes = [
     "/auth/sign-up",
     "/auth/error",
     "/auth/password-reset-request",
-    "/auth/reset-password"
+    "/auth/reset-password",
+
 ]
 
 
@@ -29,4 +30,4 @@ export const authRoutes = [
 */
 export const apiAuthPrefix = "/api/auth"
 
-export const DEFAULT_LOGIN_REDIRECT = "/admin"
+export const DEFAULT_LOGIN_REDIRECT = "/dashboard"
