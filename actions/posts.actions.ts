@@ -206,23 +206,29 @@ export const getPostsBySlug = async (slug: string) => {
 
 export const getAllPosts = async () => {
     if (!dbConnection) await init()
+
     try {
         const collection = await database?.collection("posts")
         if (!database || !collection) {
-            return { error: "Failed to connect to categories collection" }
+            return { error: "Failed to connect to posts collection" }
         }
 
-        const posts = await collection.find({}).sort({ name: 1 }).toArray()
+        const posts = await collection.find({}).sort({ createdAt: -1 }).toArray()
 
         // Convert MongoDB objects to plain objects
-        return posts.map((post: { _id: { toString: () => any } }) => ({
+        return posts.map((post: any) => ({
             ...post,
-            _id: post._id.toString() // Convert ObjectId to string
+            _id: post._id.toString(), // Convert ObjectId to string (use _id, not id)
+            publishedAt: post.publishedAt ? new Date(post.publishedAt).toISOString() : null,
+            createdAt: post.createdAt ? new Date(post.createdAt).toISOString() : null,
+            updatedAt: post.updatedAt ? new Date(post.updatedAt).toISOString() : null,
         }))
     } catch (error: any) {
-        return { error: error.message || "Failed to fetch categories" }
+        console.error("Error in getAllPosts:", error)
+        return { error: error.message || "Failed to fetch posts" }
     }
 }
+
 
 export const updatePost = async (id: string, updateData: any) => {
     if (!dbConnection) await init();

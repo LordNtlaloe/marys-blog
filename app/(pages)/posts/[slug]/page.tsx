@@ -28,24 +28,43 @@ export default function StoryPage({ params }: { params: Promise<{ slug: string }
 
   useEffect(() => {
     async function fetchData() {
-      const fetched = await getPostsBySlug(slug);
-      const recent = await getAllPosts();
-      const cats = await getAllCategories();
-      const users = await getAllUsers();
+      try {
+        const fetched = await getPostsBySlug(slug);
+        const recent = await getAllPosts();
+        const cats = await getAllCategories();
+        const users = await getAllUsers();
 
-      if (!("error" in fetched)) {
-        setStory(fetched);
+        // Fix: Check if fetched exists and is not null before using 'in' operator
+        if (fetched && typeof fetched === 'object' && !("error" in fetched)) {
+          setStory(fetched);
 
-        const matchedCategory = cats.find((cat: any) => cat._id === fetched.categoryId);
-        setStoryCategory(matchedCategory || null);
+          // Ensure cats is an array before using find
+          if (Array.isArray(cats)) {
+            const matchedCategory = cats.find((cat: any) => cat._id === fetched.categoryId);
+            setStoryCategory(matchedCategory || null);
+          }
 
-        const matchedAuthor = users.find((user: any) => user._id === fetched.authorId);
-        setAuthor(matchedAuthor || null);
+          // Ensure users is an array before using find
+          if (Array.isArray(users)) {
+            const matchedAuthor = users.find((user: any) => user._id === fetched.authorId);
+            setAuthor(matchedAuthor || null);
+          }
+        } else {
+          console.error("Error fetching post:", fetched);
+        }
+
+        if (Array.isArray(recent)) {
+          setRecentStories(recent.slice(0, 5));
+        }
+
+        if (Array.isArray(cats)) {
+          setCategories(cats);
+        }
+      } catch (error) {
+        console.error("Error in fetchData:", error);
+      } finally {
+        setLoading(false);
       }
-      if (Array.isArray(recent)) setRecentStories(recent.slice(0, 5));
-      if (Array.isArray(cats)) setCategories(cats);
-
-      setLoading(false);
     }
 
     fetchData();

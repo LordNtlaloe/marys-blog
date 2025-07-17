@@ -62,7 +62,10 @@ export function Navbar() {
         </ul>
 
         <div className="hidden lg:flex items-center gap-2">
-          <Button variant="ghost">Sign In</Button>
+          <ThemeToggleButton />
+          <Link href="/auth/sign-in" className="cursor-pointer">
+            <Button variant="ghost">Sign In</Button>
+          </Link>
           <Link href="#">
             <Button variant="default">Contact</Button>
           </Link>
@@ -89,7 +92,7 @@ export function Navbar() {
           </ul>
           <div className="mt-6 flex flex-col gap-2">
             <ThemeToggleButton />
-            <Link href="/auth/sign-in">
+            <Link href="/auth/sign-in" className="cursor-pointer">
               <Button variant="default">Sign In</Button>
             </Link>
           </div>

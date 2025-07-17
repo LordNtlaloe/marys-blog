@@ -47,16 +47,25 @@ export default function PostsTable() {
         const fetchPosts = async () => {
             try {
                 setLoading(true)
-                // Fetch all posts (published, draft, archived) for dashboard
                 const response = await getAllPosts()
 
-                console.log("Posts response:", response) // Debug log
+                console.log("Posts response:", response)
 
-                // Handle the response structure correctly
-                if (Array.isArray(response)) {
-                    setPosts(response)
+                // Better null/undefined checking
+                if (response && Array.isArray(response)) {
+                    // Ensure all posts have proper structure and convert any ObjectId to string
+                    const sanitizedPosts = response.map((post: any) => ({
+                        ...post,
+                        _id: post._id?.toString() || post._id || '',
+                        publishedAt: post.publishedAt ? new Date(post.publishedAt).toISOString() : null,
+                        createdAt: post.createdAt ? new Date(post.createdAt).toISOString() : null,
+                    }))
+                    setPosts(sanitizedPosts)
+                } else if (response && typeof response === 'object' && 'error' in response) {
+                    toast.error(response.error || "Failed to fetch posts")
+                    setPosts([])
                 } else {
-                    toast.error(response?.error || "Failed to fetch posts")
+                    toast.error("Invalid response format")
                     setPosts([])
                 }
             } catch (error) {
@@ -97,7 +106,7 @@ export default function PostsTable() {
                 />
                 <DropdownMenu>
                     <div className="flex flex-row gap-x-3">
-                        <Button onClick={() => router.push("/posts/create")}>
+                        <Button onClick={() => router.push("/dashboard/posts/create")}>
                             Add New Post
                         </Button>
                         <DropdownMenuTrigger asChild>
@@ -174,17 +183,13 @@ export default function PostsTable() {
                     size="sm"
                     onClick={() => table.previousPage()}
                     disabled={!table.getCanPreviousPage()}
-                >
-                    Previous
-                </Button>
+                />
                 <Button
                     variant="outline"
                     size="sm"
                     onClick={() => table.nextPage()}
                     disabled={!table.getCanNextPage()}
-                >
-                    Next
-                </Button>
+                />
             </div>
         </div>
     )
