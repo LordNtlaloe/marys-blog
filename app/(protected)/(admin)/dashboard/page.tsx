@@ -1,5 +1,4 @@
 "use client"
-
 import { getAllUsers } from '@/actions/user.actions';
 import { getAllPosts } from '@/actions/posts.actions';
 import {
@@ -10,36 +9,114 @@ import { useEffect, useState } from "react";
 
 export const dynamic = 'force-dynamic';
 
-export default function DashboardPage() {
-  const [users, setUsers] = useState([]);
-  const [posts, setPosts] = useState([]);
+// Define proper interfaces
+interface User {
+  _id: string;
+  first_name: string;
+  last_name: string;
+  email: string;
+  role: string;
+  createdAt: string;
+  updatedAt?: string;
+}
 
-  
+interface Post {
+  _id: string;
+  title: string;
+  excerpt: string;
+  content: string;
+  status: 'published' | 'draft' | 'archived';
+  readTime: number;
+  views: number;
+  likes: number;
+  publishedAt: string | null;
+  createdAt: string;
+  updatedAt?: string;
+  author_name: string;
+  category_name: string;
+  slug: string;
+  tags?: string[];
+  featuredImageUrl?: string;
+}
+
+interface ErrorResponse {
+  error: string;
+}
+
+interface ChartData {
+  name: string;
+  count: number;
+}
+
+interface LineChartData {
+  name: string;
+  views: number;
+}
+
+export default function DashboardPage() {
+  const [users, setUsers] = useState<User[] | ErrorResponse>([]);
+  const [posts, setPosts] = useState<Post[] | ErrorResponse>([]);
+  const [loading, setLoading] = useState(true);
+
   useEffect(() => {
     const fetchData = async () => {
-      const [fetchedUsers, fetchedPosts] = await Promise.all([
-        getAllUsers(),
-        getAllPosts()
-      ]);
-      setUsers(fetchedUsers);
-      setPosts(fetchedPosts);
+      try {
+        const [fetchedUsers, fetchedPosts] = await Promise.all([
+          getAllUsers(),
+          getAllPosts()
+        ]);
+
+        setUsers(fetchedUsers);
+        setPosts(fetchedPosts);
+      } catch (error) {
+        console.error('Error fetching dashboard data:', error);
+        setUsers({ error: 'Failed to fetch users' });
+        setPosts({ error: 'Failed to fetch posts' });
+      } finally {
+        setLoading(false);
+      }
     };
+
     fetchData();
   }, []);
 
-  if ('error' in users || 'error' in posts) {
-    return <div className="text-red-500">Error fetching data</div>;
+  if (loading) {
+    return (
+      <div className="p-6 text-center">
+        <div className="text-gray-600 dark:text-gray-400">Loading dashboard...</div>
+      </div>
+    );
   }
 
-  const userCount = users.length;
-  const postCount = posts.length;
+  // Type guards to check for errors
+  const hasUserError = users && typeof users === 'object' && 'error' in users;
+  const hasPostError = posts && typeof posts === 'object' && 'error' in posts;
 
-  const chartData = [
+  if (hasUserError || hasPostError) {
+    return (
+      <div className="p-6">
+        <div className="text-red-500">
+          Error fetching data:
+          {hasUserError && <div>Users: {(users as ErrorResponse).error}</div>}
+          {hasPostError && <div>Posts: {(posts as ErrorResponse).error}</div>}
+        </div>
+      </div>
+    );
+  }
+
+  // Type assertions after error checking
+  const userArray = users as User[];
+  const postArray = posts as Post[];
+
+  const userCount = userArray.length;
+  const postCount = postArray.length;
+
+  const chartData: ChartData[] = [
     { name: "Users", count: userCount },
     { name: "Posts", count: postCount },
   ];
 
-  const lineChartData = posts.map((post: any, index: number) => ({
+  const lineChartData: LineChartData[] = postArray.map((post: Post, index: number) => ({
     name: `Post ${index + 1}`,
     views: post.views || Math.floor(Math.random() * 100),
   }));

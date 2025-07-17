@@ -36,6 +36,7 @@ interface Post {
     slug: string
 }
 
+
 export default function PostsTable() {
     const [posts, setPosts] = useState<Post[]>([])
     const [sorting, setSorting] = useState<SortingState>([])
@@ -54,7 +55,7 @@ export default function PostsTable() {
                 // Better null/undefined checking
                 if (response && Array.isArray(response)) {
                     // Ensure all posts have proper structure and convert any ObjectId to string
-                    const sanitizedPosts = response.map((post: any) => ({
+                    const sanitizedPosts = response.map((post: Post) => ({
                         ...post,
                         _id: post._id?.toString() || post._id || '',
                         publishedAt: post.publishedAt ? new Date(post.publishedAt).toISOString() : null,
