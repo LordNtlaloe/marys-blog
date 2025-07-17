@@ -89,8 +89,8 @@ export function Navbar() {
           </ul>
           <div className="mt-6 flex flex-col gap-2">
             <ThemeToggleButton />
-            <Link href="#">
-              <Button variant="default"><Link href="/auth/sign-in">Sign In</Link></Button>
+            <Link href="/auth/sign-in">
+              <Button variant="default">Sign In</Button>
             </Link>
           </div>
         </div>
