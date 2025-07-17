@@ -34,27 +34,27 @@ const navItems: NavItem[] = [
     {
         icon: <FileTextIcon />,
         name: "Posts",
-        path: "/posts"
+        path: "/dashboard/posts"
     },
     {
         icon: <ClipboardListIcon />,
         name: "Categories",
-        path: "/categories",
+        path: "/dashboard/categories",
     },
     {
         icon: <PieChartIcon />,
         name: "Tags",
-        path: "/tags",
+        path: "/dashboard/tags",
     },
     {
         icon: <MessageSquareIcon />,
         name: "Comments",
-        path: "/comments",
+        path: "/dashboard/comments",
     },
     {
         icon: <BarChart2Icon />,
         name: "Publications",
-        path: "/publications",
+        path: "/dashboard/publications",
     },
 ];
 
