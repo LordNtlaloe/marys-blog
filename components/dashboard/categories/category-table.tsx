@@ -98,7 +98,7 @@ export default function CategoriesTable() {
                     className="max-w-sm"
                 />
                 <Button asChild className="ml-auto">
-                    <Link href="/categories/create">Add Category</Link>
+                    <Link href="/dashboard/categories/create">Add Category</Link>
                 </Button>
                 <DropdownMenu>
                     <DropdownMenuTrigger asChild>
